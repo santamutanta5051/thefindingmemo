@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>TheFindingMemo</title>
+    <style>
+        /* CSS: Базовые ретро-стили */
+        body {
+            background-color: #1a1a2e;
+            color: #00ff66;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        h1 {
+            text-shadow: 2px 2px #ff007f;
+            font-size: 2rem;
+            margin-bottom: 20px;
+        }
+
+        /* Обновленная заставка на весь экран */
+        .intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #05050a; /* Темный ретро-фон вокруг картинки */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999; /* Всегда поверх сайта */
+            box-sizing: border-box;
+            padding: 20px;
+        }
+
+        /* Контейнер для самой картинки заставки */
+        .intro-poster {
+            width: 100%;
+            max-width: 500px; /* Ограничиваем размер, чтобы картинка не размывалась */
+            height: auto;
+            aspect-ratio: 1 / 1; /* Сохраняем идеальный квадрат */
+            background-image: url('./intro-bg.jpeg'); /* Путь к твоей картинке */
+            background-size: contain; /* Картинка сжимается аккуратно без обрезки */
+            background-repeat: no-repeat;
+            background-position: center;
+            box-shadow: 0 0 20px rgba(0, 255, 102, 0.2); /* Легкое неоновое свечение */
+            margin-bottom: 20px;
+        }
+
+        /* Текст под картинкой заставки */
+        .intro-title {
+            color: #ff007f;
+            font-size: 1.8rem;
+            margin: 10px 0 20px 0;
+            text-shadow: 2px 2px 0px #00ff66;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        /* Кнопка СТАРТ */
+        .start-btn {
+            background: #161616;
+            color: #00ff66;
+            border: 4px solid #00ff66;
+            padding: 12px 35px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px #ff007f;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0.4; }
+        }
+
+        /* Стильный ретро-плеер в правом верхнем углу */
+        .retro-player {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #161616;
+            border: 2px solid #ff007f;
+            box-shadow: 4px 4px 0px #00ff66;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            z-index: 100;
+        }
+
+        .player-title {
+            font-size: 0.8rem;
+            color: #00ff66;
+            margin: 0;
+        }
+
+        .retro-player audio {
+            height: 30px;
+            width: 200px;
+        }
+
+        /* Основное окно операционной системы мемов */
+        .window {
+            border: 4px solid #00ff66;
+            background-color: #161616;
+            box-shadow: 8px 8px 0px #ff007f;
+            padding: 20px;
+            width: 95%;
+            max-width: 800px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        /* Экран для вывода мема */
+        .screen {
+            background-color: #000;
+            border: 2px solid #555;
+            min-height: 450px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            overflow: hidden;
+            padding: 10px;
+        }
+
+        .screen img {
+            max-width: 100%;
+            max-height: 600px;
+            height: auto;
+            object-fit: contain;
+            image-rendering: auto; /* Четкий текст на мемах */
+        }
+
+        /* 16-битная кнопка генерации */
+        .retro-btn {
+            background-color: #ff007f;
+            color: white;
+            border: 4px solid #00ff66;
+            padding: 12px 25px;
+            font-family: 'Courier New', monospace;
+            font-size: 1.3rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px #000;
+        }
+
+        .retro-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #000;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ЭКРАН ЗАГРУЗКИ (ЗАСТАВКА) -->
+    <div class="intro-overlay" id="introOverlay">
+        <div class="intro-poster"></div> <!-- Контейнер для картинки The Finding Memo -->
+        <h2 class="intro-title">MEME OS v1.0<br>READY TO LOAD</h2>
+        <button class="start-btn" onclick="startSystem()">PRESS START</button>
+    </div>
+
+    <!-- РЕТРО-ПЛЕЕР -->
+    <div class="retro-player">
+        <p class="player-title">[ MUSIC_PLAYER ]</p>
+        <audio id="bgMusic" src="bg-music.mp3" controls loop></audio>
+    </div>
+
+    <!-- ОСНОВНОЙ КОНТЕНТ САЙТА -->
+    <h1>[ MEME_OS_v1.0 ]</h1>
+
+    <div class="window">
+        <div class="screen" id="memeScreen">
+            <p id="placeholderText">Нажми кнопку, чтобы призвать мем...</p>
+        </div>
+
+        <button class="retro-btn" onclick="showRandomMeme()">КЕК</button>
+    </div>
+
+    <script>
+        const clickSound = new Audio("click.mp3");
+
+        // Указываем общее количество мемов в папке после переименования Windows
+        const totalMemesCount = 1074; 
+
+        function startSystem() {
+            const music = document.getElementById("bgMusic");
+            music.play().catch(() => {});
+
+            const overlay = document.getElementById("introOverlay");
+            overlay.style.display = "none";
+        }
+
+        function showRandomMeme() {
+            clickSound.currentTime = 0;
+            clickSound.play().catch(() => {});
+
+            // Генерируем случайное число от 1 до 1074
+            const randomNum = Math.floor(Math.random() * totalMemesCount) + 1;
+
+            // Формируем путь к файлу. Если Windows переименовала в формат "1 (номер).jpg"
+            // Важно: если расширение твоих мемов .jpeg или .png, измени .jpg ниже на нужное
+            const selectedMemePath = `memes/1 (${randomNum}).jpg`;
+
+            const screen = document.getElementById("memeScreen");
+            screen.innerHTML = `<img src="${selectedMemePath}" alt="Рандомный мем">`;
+        }
+    </script>
+
+</body>
+</html>
