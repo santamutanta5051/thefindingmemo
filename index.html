@@ -206,7 +206,7 @@
             clickSound.currentTime = 0;
             clickSound.play().catch(() => {});
 
-            // Генерируем случайное число от 1 до 1074
+            // Генерируем случайное число от 1 до 1842
             const randomNum = Math.floor(Math.random() * totalMemesCount) + 1;
 
             // Формируем путь к файлу. Если Windows переименовала в формат "1 (номер).jpg"
@@ -214,7 +214,7 @@
             const selectedMemePath = `memes/1 (${randomNum}).jpg`;
 
             const screen = document.getElementById("memeScreen");
-            screen.innerHTML = `<img src="${selectedMemePath}" alt="Рандомный мем">`;
+            screen.innerHTML = `<img src="${selectedMemePath}" alt="Здесь могла быть Ваша реклама">`;
         }
     </script>
 
